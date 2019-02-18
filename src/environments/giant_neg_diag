@@ -1,0 +1,25 @@
+xxxxxxxxxxxxxxxxxxxx
+x------x-----------x
+xxxxx--x-----------x
+x------x-----------x
+x------x---xxxx----x
+x------x---xxxx----x
+x------x---xxxx----x
+x----xxx---xxxx----x
+x------------------x
+x------------------x
+x-xxxxxxxx---------x
+x------------------x
+x--------------x---x
+x--------------x---x
+x-x-----xxxxx--x---x
+x-x------------x---x
+x-xxxxxx-------x---x
+x--------------x---x
+x--------------x--+x
+xxxxxxxxxxxxxxxxxxxx
+
+diagonal
+1 1
+-0.01 0
+18 18 1

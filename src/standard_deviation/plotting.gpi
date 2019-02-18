@@ -1,0 +1,37 @@
+#!/usr/bin/gnuplot -c
+bins = system("ls bin/*rl* bin/*ql*")
+dir = "standard_deviation/"
+N = "10"
+
+system("mkdir -p /tmp/environments")
+deviations = system("seq 0 0.025 3")
+
+set terminal svg size 1366,768
+set key autotitle columnheader
+do for [bin in bins] {
+	algo        = system("basename ".bin)
+	output_file = dir.algo.".svg"
+	data_file   = dir.algo."_data"
+
+	system("mkdir -p ".dir)
+	system("> ".data_file)
+	print "Plotting to ".output_file
+
+	do for [std in deviations] {
+		print std
+		env_path = '/tmp/environments/simple_'.std
+		system("environments/gen_simple ".std." > ".env_path)
+		system("echo -n '".std." ' >> ".data_file)
+		system(bin." params/basic ".env_path." ".N." 5 2> /dev/null | tail -1 >> ".data_file)
+	}
+	set title "Iterations to Convergence"
+	set xlabel "Standard Deviation"
+	set ylabel "Iterations"
+	set style data histogram
+	set style histogram errorbars gap 1 lw 1
+	set style fill solid 1 border lt -1
+	
+	set output output_file
+	plot data_file u 1:2:4 w errorbars
+	unset output
+}

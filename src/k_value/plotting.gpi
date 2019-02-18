@@ -1,0 +1,27 @@
+#!/usr/bin/gnuplot -c
+#bins = system("ls bin/qrl bin/qqrl bin/dqrl bin/dqqrl")
+bins = "bin/qrl bin/qqrl"
+dir = "k_value/"
+N = "100000"
+ks = system("seq 0.01 0.01 2")
+system("mkdir -p /tmp/k")
+
+do for [bin in bins]{
+	algo = system("basename ".bin)
+	print algo
+	data_file = dir.algo."_data"
+	output_file = dir.algo.".svg"
+	system("> ".data_file)
+	do for [k in ks] {
+		print k
+		params = "/tmp/k/params_".k
+		system("params/gen_k ".k." > ".params)
+		system("echo -n '".k." ' >> ".data_file)
+		system(bin." ".params." environments/simple ".N." 5 2> /dev/null | tail -1 >> ".data_file)
+	}
+
+	set terminal svg size 1366,768
+	set output output_file
+	plot data_file u 1:2:4 w errorbars
+	unset output
+}

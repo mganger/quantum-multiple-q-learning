@@ -1,0 +1,37 @@
+#!/usr/bin/gnuplot -c
+#bins = system("ls bin/q*l bin/dq*l bin/m*")
+#bins = "bin/ql bin/dql bin/mql_5 bin/qrl bin/dqrl bin/mqrl_5 bin/qqrl bin/dqqrl bin/mqqrl_5"
+bins = "bin/dqqrl bin/mqqrl_5"
+dir = "state_value/"
+N = "100"
+if(ARGC > 0){
+	environments = ARG1
+	print environments
+}
+else {
+	 #environments = "environments/simple environments/simple_rand"
+	environments = "environments/simple_rand_1"
+}
+set terminal svg size 1366,768
+do for [bin in bins] {
+	algo = system("basename ".bin)
+	do for [env_path in environments]{
+		env = system("basename ".env_path)
+		output_dir = dir.env."/"
+		output_file = output_dir.algo.".svg"
+		data_file   = output_dir.algo."_data"
+		print "Plotting to ".output_file
+		system("mkdir -p ".output_dir)
+
+		#print(bin." params/basic ".env_path." ".N." 2> /dev/null > ".data_file)
+		system(bin." params/basic ".env_path." ".N." 2> /dev/null > ".data_file)
+		columns = system("awk 'NR==1{print NF}' ".data_file)
+
+		set output output_file
+		set title algo." ".env." ".N
+		set xlabel "Episode"
+		set ylabel "Value"
+		plot for [i=6:columns] data_file u 1:i w l
+		unset output
+	}
+}

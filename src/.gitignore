@@ -1,0 +1,6 @@
+*.pdf
+bin/*
+path_distribution
+qrl
+*.swp
+*.swo

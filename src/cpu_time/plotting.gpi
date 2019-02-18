@@ -1,0 +1,14 @@
+#!/usr/bin/gnuplot -c
+bins = system("ls -r bin/*rl* bin/*ql*")
+print bins
+#bins = "bin/qrl bin/qqrl"
+dir = "cpu_time/"
+data_file = dir."/data"
+N = "10000"
+system("> ".data_file)
+do for [bin in bins]{
+	algo = system("basename ".bin)
+	print algo
+	system("echo -n '".bin." ' >> ".data_file)
+	system(bin." params/basic environments/simple ".N." 5 2> /dev/null | tail -1 >> ".data_file)
+}

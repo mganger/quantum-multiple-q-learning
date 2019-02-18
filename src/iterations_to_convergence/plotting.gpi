@@ -1,0 +1,41 @@
+#!/usr/bin/gnuplot -c
+
+bins = system("ls bin/*rl* bin/*ql*")
+dir = "iterations_to_convergence/"
+N = "10"
+if(ARGC > 0){
+	environments = ARG1
+	print environments
+}
+else {
+	 environments = "environments/simple environments/simple_rand"
+}
+
+set terminal svg size 1366,768
+set key autotitle columnheader
+do for [env_path in environments]{
+	env = system("basename ".env_path)
+	print(env)
+	output_file = dir.env.".svg"
+	filename = dir.env."_data"
+	system("> ".filename)
+	print "Plotting to ".output_file
+
+	do for [bin in bins] {
+		algo = system("basename ".bin)
+		print algo
+		system("echo -n '".algo." ' >> ".filename)
+		system(bin." params/basic ".env_path." ".N." 5 2> /dev/null | tail -1 >> ".filename)
+	}
+
+	set title "Iterations to Convergence"
+	set xlabel "Algorithm"
+	set ylabel "Iterations"
+	set style data histogram
+	set style histogram errorbars gap 1 lw 1
+	set style fill solid 1 border lt -1
+	
+	set output output_file
+	plot filename u 2:4:xtic(1) title ""
+	unset output
+}

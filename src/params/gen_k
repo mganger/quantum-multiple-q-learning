@@ -1,0 +1,6 @@
+#!/bin/bash
+echo "alpha    0.05"
+echo "gamma    0.99"
+echo "k       " $1
+echo "epsilon  0.1"
+echo "episodes 1000"

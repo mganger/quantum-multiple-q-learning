@@ -1,0 +1,5 @@
+alpha    0.005
+gamma    0.99
+k        3
+epsilon  0.1
+episodes 10000
